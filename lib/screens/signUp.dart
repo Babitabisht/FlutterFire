@@ -60,7 +60,7 @@ class _SignUpState extends State<SignUp> {
                           email: _email, password: _password)
                       .then((sigedInUser) {
                     debugPrint("authenticated");
-
+  
                     UserHelper().storeNewUser(sigedInUser, context);
                     // Navigator.push(context,
                     //     MaterialPageRoute(builder: (context) => Login()));

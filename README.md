@@ -2,12 +2,15 @@
 
 Firebase functions
 
-***Used plugins
--  cloud_firestore:
--  firebase_auth:
--  firebase_core: ^0.4.0+9
+\*\*\*Used plugins
+
+- cloud_firestore:
+- firebase_auth:
+- firebase_core: ^0.4.0+9
+- google_sign_in
 
 #### SignIn
+
 ```
 FirebaseAuth.instance
 .createUserWithEmailAndPassword(
@@ -27,6 +30,7 @@ password: _password)
 ```
 
 #### Login with email and password
+
 ```
 
  FirebaseAuth.instance
@@ -43,6 +47,7 @@ password: _password)
 ```
 
 #### create collections
+
 ```
   storeNewUser(user, context) {
     print("user is ${user.user.providerData[0]}");
@@ -56,4 +61,38 @@ password: _password)
     }).catchError((err) {
       print("err in creating collection----$err");
     });
+```
+
+### sign in with google
+
+```
+
+  Future<String> signInWithGoogle() async {
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+
+    final AuthResult authResult = await _auth.signInWithCredential(credential);
+    final FirebaseUser user = authResult.user;
+
+    assert(!user.isAnonymous);
+    assert(await user.getIdToken() != null);
+
+    final FirebaseUser currentUser = await _auth.currentUser();
+    assert(user.uid == currentUser.uid);
+
+    return 'signInWithGoogle succeeded: $user';
+  }
+
+  void signOutGoogle() async {
+    await googleSignIn.signOut();
+
+    print("User Sign Out");
+  }
+
 ```

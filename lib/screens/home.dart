@@ -19,9 +19,15 @@ class Home extends StatelessWidget {
               textColor: Colors.white,
               onPressed: () {
                 FirebaseAuth.instance.signOut().then((onValue) {
+                  debugPrint("---in logout----");
+                 // print(onValue);
+
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Login()));
-                }).catchError((onError) {});
+                }).catchError((onError) {
+                  debugPrint("---error on logout-----$onError");
+                  
+                });
               },
             )
           ],
